@@ -5,4 +5,4 @@
 Vue3 Element Admin是基于vue3+ElementPlus+Vite开发，已经提供了基础性的功能，可以更快搭建本次项目工程。
 
 项目安装依赖：npm install
-项目启动允许：npm start
+项目启动运许：npm start
