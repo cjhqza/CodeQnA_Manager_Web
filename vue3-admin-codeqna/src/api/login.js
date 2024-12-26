@@ -28,10 +28,10 @@ export const GetValidateCode = () => {
   })
 }
 
-// 获取登录用户信息
+// 获取登录管理用户信息
 export const GetUserinfo = () => {
   return request({
-    url: '/api/userinfo',
+    url: '/admin/system/index/getSysUserInfo',
     method: 'get',
   })
 }
