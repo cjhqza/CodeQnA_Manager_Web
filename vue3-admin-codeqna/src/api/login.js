@@ -35,3 +35,11 @@ export const GetUserinfo = () => {
     method: 'get',
   })
 }
+
+// 管理员用户登出功能
+export const Logout = () => {
+  return request({
+    url: '/admin/system/index/logout',
+    method: 'get',
+  })
+}
