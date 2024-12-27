@@ -122,17 +122,18 @@ export default defineComponent({
 .breadcrumb {
   margin-left: 10px;
   white-space: nowrap;
-  overflow: hidden;
+  /*overflow: hidden;*/
   text-overflow: ellipsis;
   ::v-deep(a),
   ::v-deep(.is-link) {
-    font-weight: normal;
+    font-weight: bold;
   }
   // ::v-deep(.el-breadcrumb__item) {
   //   float: none;
   // }
   .no_link {
     ::v-deep(.el-breadcrumb__inner) {
+      font-weight: bold;
       color: #97a8be !important;
     }
   }
