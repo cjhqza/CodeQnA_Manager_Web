@@ -67,7 +67,7 @@
         <el-button type="primary" size="small" @click="editSysRole(scope.row)">
           修改
         </el-button>
-        <el-button type="danger" size="small">
+        <el-button type="danger" size="small" @click="deleteSysRole(scope.row)">
           删除
         </el-button>
       </el-table-column>
@@ -134,8 +134,13 @@
 </template>
 
 <script setup>
-import { AddSysRole, EditSysRole, GetSysRoleListByPage } from '@/api/sysRole'
-import { ElMessage } from 'element-plus'
+import {
+  AddSysRole,
+  EditSysRole,
+  GetSysRoleListByPage,
+  DeleteSysRole,
+} from '@/api/sysRole'
+import { ElMessage, ElMessageBox } from 'element-plus'
 import { onMounted, ref } from 'vue'
 
 // 分页条总记录数
@@ -230,7 +235,7 @@ const submit = async () => {
       // 关闭弹出框
       dialogVisible.value = false
       // 提示信息
-      ElMessage.success('操作成功')
+      ElMessage.success('新建成功')
       // 刷新页面
       fetchData()
     }
@@ -241,11 +246,29 @@ const submit = async () => {
       // 关闭弹出框
       dialogVisible.value = false
       // 提示信息
-      ElMessage.success('操作成功')
+      ElMessage.success('修改成功')
       // 刷新页面
       fetchData()
     }
   }
+}
+
+// 删除按钮功能
+const deleteSysRole = row => {
+  ElMessageBox.confirm('此操作将永久删除该记录，是否继续？', 'Warning', {
+    confirmButtonText: '确定',
+    cancelButtonText: '取消',
+    type: 'warning',
+  }).then(async () => {
+    // 执行删除角色操作
+    const { code } = await DeleteSysRole(row.id)
+    if (code === 200) {
+      // 提示信息
+      ElMessage.success('删除成功')
+      // 刷新页面
+      fetchData()
+    }
+  })
 }
 </script>
 
