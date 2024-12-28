@@ -2,26 +2,24 @@
   <div class="sysRole">
     <!-- 搜索表单 -->
     <el-form label-width="70px" size="middle" class="search-form">
-      <el-row style="display: flex">
-        <!-- 表单输入区 -->
-        <el-col :span="20" class="form-input">
-          <el-form-item label="角色名称">
-            <el-input
-              placeholder="请输入需要找的角色名称"
-              v-model="sysRoleDto.roleName"
-            ></el-input>
-          </el-form-item>
-        </el-col>
-        <!-- 表单执行按钮区 -->
-        <el-col :span="4" class="form-btns">
-          <el-button type="primary" size="middle" @click="searchSysRole">
-            搜索
-          </el-button>
-          <el-button type="warning" size="middle" @click="reset">
-            重置
-          </el-button>
-        </el-col>
-      </el-row>
+      <!-- 表单输入区 -->
+      <div class="form-input">
+        <el-form-item label="角色名称">
+          <el-input
+            placeholder="请输入需要找的角色名称"
+            v-model="sysRoleDto.roleName"
+          ></el-input>
+        </el-form-item>
+      </div>
+      <!-- 表单执行按钮区 -->
+      <div class="form-btns">
+        <el-button type="primary" size="middle" @click="searchSysRole">
+          搜索
+        </el-button>
+        <el-button type="warning" size="middle" @click="reset">
+          重置
+        </el-button>
+      </div>
     </el-form>
 
     <!-- 操作按钮区 -->
@@ -58,11 +56,11 @@
     </el-row>
 
     <!--- 角色表格数据 -->
-    <el-table :data="roleList" style="width: 100%">
+    <el-table :data="roleList" style="width: 100%; min-width: 300px">
       <el-table-column prop="roleName" label="角色名称" width="180" />
       <el-table-column prop="roleCode" label="角色编码" width="180" />
       <el-table-column prop="createTime" label="创建时间" width="200" />
-      <el-table-column prop="description" label="职责描述" />
+      <el-table-column prop="description" label="职责描述" min-width="400" />
       <el-table-column label="操作" align="center" width="240" #default="scope">
         <el-button type="primary" size="small" @click="editSysRole(scope.row)">
           修改
@@ -75,6 +73,7 @@
 
     <!--分页条-->
     <el-pagination
+      class="sysRolePagination"
       v-model:current-page="pageParams.pageNum"
       v-model:page-size="pageParams.pageSize"
       @size-change="fetchData"
@@ -274,6 +273,7 @@ const deleteSysRole = row => {
 
 <style scoped>
 .sysRole {
+  min-width: 500px;
   padding: 10px;
   border: 1px solid #ebeef5;
   border-radius: 3px;
@@ -282,14 +282,21 @@ const deleteSysRole = row => {
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
 
   .search-form {
-    padding: 5px;
+    display: flex;
+    width: 100%;
+    min-width: 300px;
 
     .form-input {
-      width: 100%;
+      width: 85%;
+      min-width: 100px;
+      margin-right: 10px;
     }
 
     .form-btns {
-      text-align: center;
+      flex: 1;
+      min-width: 150px;
+      display: flex;
+      justify-content: center;
     }
   }
 
@@ -300,6 +307,10 @@ const deleteSysRole = row => {
     border: 1px solid #ebeef5;
     border-radius: 3px;
     background-color: #fff;
+  }
+
+  .sysRolePagination {
+    margin-top: 5px;
   }
 }
 </style>
