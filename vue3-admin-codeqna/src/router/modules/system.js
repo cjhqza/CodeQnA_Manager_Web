@@ -29,7 +29,7 @@ export default [
         name: 'sysUser',
         component: sysUser,
         meta: {
-          title: '用户管理',
+          title: '人员管理',
         },
         hidden: false,
       },
