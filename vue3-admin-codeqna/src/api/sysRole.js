@@ -38,3 +38,11 @@ export const DeleteSysRole = roleId => {
     method: 'delete', // 提交方式
   })
 }
+
+// 角色集合
+export const GetRolesList = userId => {
+  return request({
+    url: `${base_api}/findAllRoles/${userId}`,
+    method: 'get',
+  })
+}
