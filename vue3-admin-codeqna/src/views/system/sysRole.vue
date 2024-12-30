@@ -139,7 +139,7 @@
         v-model:page-size="pageParams.pageSize"
         @size-change="fetchData"
         @current-change="fetchData"
-        :page-sizes="[1, 5, 10, 20]"
+        :page-sizes="[5, 10, 20, 50]"
         small
         background
         layout="prev, pager, next, jumper, ->, sizes, total"
@@ -147,10 +147,11 @@
       />
     </div>
 
-    <!-- 添加或修改角色表单弹出框 -->
+    <!-- 新建或修改角色表单弹出框 -->
     <el-dialog
       v-model="dialogVisible"
       width="30%"
+      min-width="30%"
       class="sysRoleDialog"
       align-center
       center
@@ -255,8 +256,12 @@ const fetchData = async () => {
     pageParams.value.pageSize,
     sysRoleDto.value
   )
-  roleList.value = data.list
-  total.value = data.total
+  if (code === 200) {
+    roleList.value = data.list
+    total.value = data.total
+  } else {
+    ElMessage.error(message)
+  }
 }
 
 // 搜索按钮功能
@@ -307,7 +312,7 @@ const submit = async () => {
   // 首先区分该提交是为了新建角色还是修改角色：判断当前存储角色信息是否有id（新建对象信息不包含id）
   if (!sysRole.value.id) {
     // 执行新建角色操作
-    const { code } = await AddSysRole(sysRole.value)
+    const { code, message, data } = await AddSysRole(sysRole.value)
     if (code === 200) {
       // 关闭弹出框
       dialogVisible.value = false
@@ -315,10 +320,12 @@ const submit = async () => {
       ElMessage.success('新建成功')
       // 刷新页面
       fetchData()
+    } else {
+      ElMessage.error(message)
     }
   } else {
     // 执行新建角色操作
-    const { code } = await EditSysRole(sysRole.value)
+    const { code, message, data } = await EditSysRole(sysRole.value)
     if (code === 200) {
       // 关闭弹出框
       dialogVisible.value = false
@@ -326,6 +333,8 @@ const submit = async () => {
       ElMessage.success('修改成功')
       // 刷新页面
       fetchData()
+    } else {
+      ElMessage.error(message)
     }
   }
 }
@@ -338,12 +347,14 @@ const deleteSysRole = row => {
     type: 'warning',
   }).then(async () => {
     // 执行删除角色操作
-    const { code } = await DeleteSysRole(row.id)
+    const { code, message, data } = await DeleteSysRole(row.id)
     if (code === 200) {
       // 提示信息
       ElMessage.success('删除成功')
       // 刷新页面
       fetchData()
+    } else {
+      ElMessage.error(message)
     }
   })
 }
