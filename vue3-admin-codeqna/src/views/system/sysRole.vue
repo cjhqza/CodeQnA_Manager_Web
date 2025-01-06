@@ -150,8 +150,7 @@
     <!-- 新建或修改角色表单弹出框 -->
     <el-dialog
       v-model="dialogVisible"
-      width="30%"
-      min-width="30%"
+      width="400px"
       class="sysRoleDialog"
       align-center
       center

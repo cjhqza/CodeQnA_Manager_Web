@@ -180,7 +180,7 @@
     <!-- 新建或修改人员表单弹出框 -->
     <el-dialog
       v-model="dialogVisible"
-      width="30%"
+      width="500px"
       class="sysUserDialog"
       align-center
       center
@@ -267,18 +267,25 @@
     </el-dialog>
 
     <!-- 分配角色弹出框 -->
-    <el-dialog v-model="dialogRoleVisible" width="40%" align-center center>
+    <el-dialog v-model="dialogRoleVisible" width="600px" align-center center>
       <template #header>
         <div class="dialog-header">
           <h1>CodeQnA 分配角色</h1>
         </div>
       </template>
-      <el-form>
-        <el-form-item>
+      <el-form class="user-form">
+        <el-form-item class="form-item">
           <el-input
             prefix-icon="User"
             disabled
             :value="sysUser.userName"
+          ></el-input>
+        </el-form-item>
+        <el-form-item class="form-item">
+          <el-input
+            prefix-icon="UserFilled"
+            disabled
+            :value="sysUser.name"
           ></el-input>
         </el-form-item>
       </el-form>
@@ -681,8 +688,18 @@ const submitAssign = async () => {
     }
   }
 
+  .user-form {
+    display: flex;
+    width: 100%;
+    justify-content: space-between;
+    .form-item {
+      width: 48%;
+    }
+  }
+
   .role-border {
     display: flex;
+    min-width: 505px;
     justify-content: center;
     position: relative;
     margin-top: 20px;
@@ -702,7 +719,7 @@ const submitAssign = async () => {
       width: 100%;
       /* 允许换行 */
       flex-wrap: wrap;
-      /* border: 1px solid red; */
+
       .checkbox {
         /* 每行显示3个 checkbox，减去间距 */
         width: 27%;
