@@ -46,3 +46,20 @@ export const GetRolesList = userId => {
     method: 'get',
   })
 }
+
+// 查询所有菜单以及根据角色id查找对应的菜单id
+export const FindMenuIdByRoleId = roleId => {
+  return request({
+    url: `${base_api}/findMenuIdByRoleId/${roleId}`,
+    method: 'get',
+  })
+}
+
+// 分配菜单提交
+export const DoAssign = assignMenuDto => {
+  return request({
+    url: `${base_api}/doAssign`,
+    method: 'post',
+    data: assignMenuDto,
+  })
+}

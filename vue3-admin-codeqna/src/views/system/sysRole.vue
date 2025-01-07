@@ -112,9 +112,12 @@
         <el-table-column
           label="操作"
           align="center"
-          width="240"
+          width="280"
           #default="scope"
         >
+          <el-button type="warning" size="small" @click="assignMenu(scope.row)">
+            分配菜单
+          </el-button>
           <el-button
             type="primary"
             size="small"
@@ -193,6 +196,30 @@
         </div>
       </template>
     </el-dialog>
+
+    <!-- 分配菜单弹出框 -->
+    <el-dialog v-model="dialogMenuVisible" width="400px" align-center center>
+      <template #header>
+        <div class="dialog-header">
+          <h1>CodeQnA 分配菜单</h1>
+        </div>
+      </template>
+      <el-tree
+        :data="sysMenuTreeList"
+        ref="tree"
+        show-checkbox
+        default-expand-all
+        :check-on-click-node="true"
+        node-key="id"
+        :props="menuTreeProps"
+      />
+      <template #footer>
+        <div class="dialog-footer">
+          <el-button type="primary" @click="submitAssign">提交</el-button>
+          <el-button @click="dialogMenuVisible = false">取消</el-button>
+        </div>
+      </template>
+    </el-dialog>
   </div>
 </template>
 
@@ -202,6 +229,8 @@ import {
   EditSysRole,
   GetSysRoleListByPage,
   DeleteSysRole,
+  FindMenuIdByRoleId,
+  DoAssign,
 } from '@/api/sysRole'
 import { ElMessage, ElMessageBox } from 'element-plus'
 import { onMounted, ref } from 'vue'
@@ -242,6 +271,24 @@ const sysRole = ref(sysRoleForm)
 
 // 定义对话框标题数据
 const sysRoleDialogTitle = ref('')
+
+// 定义分配菜单弹出框显示变量，默认为false
+const dialogMenuVisible = ref(false)
+
+// 分配菜单弹出框树型数据
+const sysMenuTreeList = ref([])
+
+// 树对象变量
+const tree = ref()
+
+// 自定义树节点的属性
+const menuTreeProps = {
+  children: 'children',
+  label: 'title',
+}
+
+// 默认选中的菜单数据集合对应角色id
+const roleId = ref('')
 
 // 挂载
 onMounted(() => {
@@ -306,7 +353,7 @@ const editSysRole = row => {
   dialogVisible.value = true
 }
 
-// 提交按钮功能
+// 新建或修改提交按钮功能
 const submit = async () => {
   // 首先区分该提交是为了新建角色还是修改角色：判断当前存储角色信息是否有id（新建对象信息不包含id）
   if (!sysRole.value.id) {
@@ -356,6 +403,62 @@ const deleteSysRole = row => {
       ElMessage.error(message)
     }
   })
+}
+
+// 分配菜单按钮功能
+const assignMenu = async row => {
+  roleId.value = row.id
+  // 打开分配菜单弹出框
+  dialogMenuVisible.value = true
+  const { code, data, message } = await FindMenuIdByRoleId(row.id)
+  if (code === 200) {
+    sysMenuTreeList.value = data.sysMenuList
+    // 数据回显
+    tree.value.setCheckedKeys(data.menuIds)
+  } else {
+    ElMessage.error(message)
+  }
+}
+
+// 分配菜单提交按钮功能
+const submitAssign = async () => {
+  const checkedNodes = tree.value.getCheckedNodes() // 获取选中的节点
+  const checkedNodesIds = checkedNodes.map(node => {
+    // 获取选中的节点的id
+    return {
+      id: node.id,
+      isHalf: 0,
+    }
+  })
+
+  // 获取半选中的节点数据，当一个节点的子节点被部分选中时，该节点会呈现出半选中的状态
+  const halfCheckedNodes = tree.value.getHalfCheckedNodes()
+  const halfCheckedNodesIds = halfCheckedNodes.map(node => {
+    // 获取半选中节点的id
+    return {
+      id: node.id,
+      isHalf: 1,
+    }
+  })
+
+  // 将选中的节点id和半选中的节点的id进行合并
+  const menuIds = [...checkedNodesIds, ...halfCheckedNodesIds]
+
+  // 构建请求数据
+  const assignMenuDto = {
+    roleId: roleId.value,
+    menuIdList: menuIds,
+  }
+
+  // 发送请求
+  const { code, data, message } = await DoAssign(assignMenuDto)
+  if (code === 200) {
+    ElMessage.success('分配成功')
+  } else {
+    ElMessage.error(message)
+  }
+  // 关闭分配菜单弹出框
+  dialogMenuVisible.value = false
 }
 </script>
 
@@ -434,6 +537,7 @@ const deleteSysRole = row => {
     box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
     /* 使子组件超出父组件范围的内容进行隐藏 */
     overflow: hidden;
+
     .role-pagination {
       margin: 5px 0;
       width: 100%;
