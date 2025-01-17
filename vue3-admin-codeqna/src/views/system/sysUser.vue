@@ -229,7 +229,7 @@
           <el-upload
             drag
             class="avatar-uploader"
-            action="http://localhost:8501/admin/system/fileUpload"
+            action="http://localhost:8501/admin/system/avatarFileUpload"
             :show-file-list="false"
             :on-success="handleAvatarSuccess"
             :headers="headers"
