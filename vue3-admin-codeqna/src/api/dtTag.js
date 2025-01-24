@@ -3,12 +3,10 @@ import request from '@/utils/request'
 const base_api = '/admin/data/dtTag'
 
 // 标签列表
-export const GetDtTagListByPage = (pageNum, pageSize, dtTagDto) => {
+export const GetDtTagListTree = () => {
   return request({
-    // ``: 模板字符串
-    url: `${base_api}/findByPage/${pageNum}/${pageSize}`, // 路径
-    method: 'post', // 提交方式
-    params: dtTagDto, // 其他参数
+    url: `${base_api}/findAll`,
+    method: 'get',
   })
 }
 

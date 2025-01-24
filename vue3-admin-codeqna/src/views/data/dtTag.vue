@@ -1,27 +1,5 @@
 <template>
   <div class="dtTag">
-    <!-- 搜索表单 -->
-    <el-form label-width="70px" size="middle" class="search-form">
-      <!-- 表单输入区 -->
-      <div class="form-input">
-        <el-form-item label="标签检索" class="input-item">
-          <el-input
-            placeholder="请输入相关标签名的内容"
-            v-model="tagNameStore"
-          ></el-input>
-        </el-form-item>
-      </div>
-      <!-- 表单执行按钮区 -->
-      <div class="form-btns">
-        <el-button type="primary" size="middle" @click="searchDtTag">
-          搜索
-        </el-button>
-        <el-button type="warning" size="middle" @click="reset">
-          重置
-        </el-button>
-      </div>
-    </el-form>
-
     <!-- 操作按钮区 -->
     <div class="tools-btns">
       <div class="btns-func">
@@ -99,7 +77,7 @@
 
     <!--- 标签表格数据 -->
     <div class="tag-table">
-      <el-table :data="tagList" stripe>
+      <el-table :data="tagList" row-key="id" border stripe>
         <el-table-column prop="img" label="代表图" width="100" #default="scope">
           <img v-if="scope.row.img" :src="scope.row.img" width="30" />
           <svg
@@ -137,9 +115,12 @@
         <el-table-column
           label="操作"
           align="center"
-          width="240"
+          width="300"
           #default="scope"
         >
+          <el-button type="success" size="small" @click="addDtTag(scope.row)">
+            新建下级标签
+          </el-button>
           <el-button type="primary" size="small" @click="editDtTag(scope.row)">
             修改
           </el-button>
@@ -148,20 +129,6 @@
           </el-button>
         </el-table-column>
       </el-table>
-      <!--分页条-->
-      <el-pagination
-        class="tag-pagination"
-        :pager-count="7"
-        v-model:current-page="pageParams.pageNum"
-        v-model:page-size="pageParams.pageSize"
-        @size-change="fetchData"
-        @current-change="fetchData"
-        :page-sizes="[5, 10, 20, 50]"
-        small
-        background
-        layout="prev, pager, next, jumper, ->, sizes, total"
-        :total="total"
-      />
     </div>
 
     <!-- 新建或修改标签表单弹出框 -->
@@ -236,40 +203,19 @@
 <script setup>
 import { ElMessage, ElMessageBox } from 'element-plus'
 import { onMounted, ref } from 'vue'
-import {
-  AddDtTag,
-  DeleteDtTag,
-  EditDtTag,
-  GetDtTagListByPage,
-} from '@/api/dtTag'
+import { AddDtTag, DeleteDtTag, EditDtTag, GetDtTagListTree } from '@/api/dtTag'
 import { useApp } from '@/pinia/modules/app'
-
-// 分页条总记录数
-let total = ref(0)
 
 // 定义标签表格数据模型
 let tagList = ref([])
-
-// 分页数据
-const pageParamsForm = {
-  pageNum: 1, // 当前页码
-  pageSize: 10, // 每页记录数
-}
-
-// 将pageForms包装成支持响应式的对象
-const pageParams = ref(pageParamsForm)
-
-// 搜索表单输入存储数据
-const dtTagDto = ref({ tagName: '' })
-// 搜索表单输入绑定数据
-const tagNameStore = ref('')
 
 // 标签对话框显示设置变量
 const dialogVisible = ref(false)
 
 // 设置存储标签信息的数据
 const dtTagForm = {
-  img: '',
+  parentId: 0, // 所属上级标签
+  img: '', // 代表图
   id: '', // 该id将用来区分管理员操作新建或是修改
   tagName: '', // 标签名称
   tagIntro: '', // 标签介绍
@@ -288,38 +234,27 @@ onMounted(() => {
 
 // 页面匹配数据
 const fetchData = async () => {
-  const { code, data, message } = await GetDtTagListByPage(
-    pageParams.value.pageNum,
-    pageParams.value.pageSize,
-    dtTagDto.value
-  )
+  const { code, data, message } = await GetDtTagListTree()
   if (code === 200) {
-    tagList.value = data.list
-    total.value = data.total
+    tagList.value = data
   } else {
     ElMessage.error(message)
   }
 }
 
-// 搜索按钮功能
-const searchDtTag = () => {
-  dtTagDto.value.tagName = tagNameStore.value
-  fetchData()
-}
-
-// 重置按钮功能
-const reset = () => {
-  tagNameStore.value = ''
-  dtTagDto.value.tagName = ''
-  fetchData()
-}
-
-// 新建按钮功能
-const addDtTag = () => {
+// 新建 / 新建下级标签 按钮功能
+const addDtTag = row => {
   // 新建标签，存储数据初始化
   dtTag.value = {}
-  // 设置对应的标题
-  dtTagDialogTitle.value = 'CodeQnA 新建标签数据'
+  // 根据id判断新建的是新的父级标签还是子级标签，确定标题
+  if (!row.id) {
+    // 设置对应的标题
+    dtTagDialogTitle.value = 'CodeQnA 新建标签数据'
+  } else {
+    dtTagDialogTitle.value = 'CodeQnA 新建子级标签'
+    // 设置父级id为当前的父级标签的id
+    dtTag.value.parentId = row.id
+  }
   // 设置显示弹出框
   dialogVisible.value = true
 }
@@ -341,8 +276,13 @@ const editDtTag = row => {
 
 // 新建或修改提交按钮功能
 const submit = async () => {
+  // 根据id判断是新建或是修改功能
   if (!dtTag.value.id) {
-    // 执行新建标签数据操作
+    // 再根据parentId判断是新建或是新建下级标签功能
+    if (!dtTag.value.parentId) {
+      // 如果没有则设置为父级标签
+      dtTag.value.parentId = 0
+    }
     const { code, data, message } = await AddDtTag(dtTag.value)
     if (code === 200) {
       // 关闭弹出框
@@ -403,38 +343,11 @@ const handleAvatarSuccess = (response, uploadFile) => {
 
 <style scoped>
 .dtTag {
-  .search-form {
-    display: flex;
-    min-width: 300px;
-    height: 50px;
-    padding-top: 15px;
-    padding-left: 10px;
-    padding-right: 10px;
-    border: 1px solid #ebeef5;
-    border-radius: 3px;
-    background-color: #fff;
-    /* 增加阴影效果 */
-    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
-
-    .form-input {
-      width: 85%;
-      min-width: 150px;
-      margin-right: 10px;
-    }
-
-    .form-btns {
-      flex: 1;
-      min-width: 150px;
-      display: flex;
-      justify-content: center;
-    }
-  }
-
   .tools-btns {
     display: flex;
     justify-content: space-between;
     min-width: 300px;
-    margin: 5px 0;
+    margin-bottom: 5px;
     padding: 10px;
     border: 1px solid #ebeef5;
     border-radius: 3px;

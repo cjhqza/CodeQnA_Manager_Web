@@ -77,7 +77,7 @@
 
     <!-- 菜单数据列表 -->
     <div class="menu-table">
-      <el-table :data="menuList" row-key="id" stripe default-expand-all>
+      <el-table :data="menuList" row-key="id" border stripe default-expand-all>
         <el-table-column prop="title" label="菜单标题" min-width="220" />
         <el-table-column prop="component" label="路由名称" min-width="180" />
         <el-table-column prop="sortValue" label="排序" min-width="120" />
