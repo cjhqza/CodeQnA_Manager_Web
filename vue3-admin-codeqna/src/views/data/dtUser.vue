@@ -128,7 +128,7 @@ import { onMounted, ref } from 'vue'
 // 分页条数据模型
 const total = ref(0)
 
-// 定义人员表格数据模型
+// 定义用户表格数据模型
 const userList = ref([])
 
 // 分页数据
@@ -140,7 +140,7 @@ const pageParamsForm = {
 // 将pageForms包装成支持响应式的对象
 const pageParams = ref(pageParamsForm)
 
-// // 搜索表单输入存储数据
+// 搜索表单输入存储数据
 const dtUserDto = ref({
   userName: '',
   beginCreateTime: '',
