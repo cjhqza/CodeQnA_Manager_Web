@@ -91,10 +91,11 @@ import { defineComponent, ref, reactive, getCurrentInstance } from 'vue'
 import Avatar from '@/components/Avatar/index.vue'
 import { AesEncryption } from '@/utils/encrypt'
 import { useRoute, useRouter } from 'vue-router'
-import { Login } from '@/api/login'
+import { Login, Logout } from '@/api/login'
 import { useApp } from '@/pinia/modules/app'
 import { storeToRefs } from 'pinia'
 import { useAccount } from '@/pinia/modules/account'
+import { ElMessage } from 'element-plus'
 
 export default defineComponent({
   components: {
@@ -162,7 +163,9 @@ export default defineComponent({
         }
       } else {
         ctx.$message(ctx.$t('topbar.lock-error'))
-        reLogin()
+        router.push('/login')
+        // 清除token
+        clearToken()
       }
     }
 
@@ -184,10 +187,15 @@ export default defineComponent({
       showModal.value = false
     }
 
-    const reLogin = () => {
-      router.push('/login?redirect=' + (route.query.redirect || '/'))
-      // 清除token
-      clearToken()
+    const reLogin = async () => {
+      const { code, data, message } = await Logout()
+      if (code === 200) {
+        router.push('/login?redirect=' + (route.query.redirect || '/'))
+        // 清除token
+        clearToken()
+      } else {
+        ElMessage.error(message)
+      }
     }
 
     return {

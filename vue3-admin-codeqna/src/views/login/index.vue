@@ -48,9 +48,9 @@
       </el-form-item>
     </el-form>
   </div>
-  <div class="change-lang">
+  <!-- <div class="change-lang">
     <change-lang />
-  </div>
+  </div> -->
 </template>
 
 <script>
@@ -66,12 +66,12 @@ import {
 } from 'vue'
 import { Login, GetValidateCode } from '@/api/login'
 import { useRouter, useRoute } from 'vue-router'
-import ChangeLang from '@/layout/components/Topbar/ChangeLang.vue'
+// import ChangeLang from '@/layout/components/Topbar/ChangeLang.vue'
 import useLang from '@/i18n/useLang'
 import { useApp } from '@/pinia/modules/app'
 
 export default defineComponent({
-  components: { ChangeLang },
+  // components: { ChangeLang },
   name: 'login',
   setup() {
     const { proxy: ctx } = getCurrentInstance() // 可以把ctx当成vue2中的this
