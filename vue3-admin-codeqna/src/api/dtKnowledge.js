@@ -18,3 +18,19 @@ export const EditDtKnowledge = id => {
     method: 'put',
   })
 }
+
+// 获取未审批的知识列表
+export const GetDtKnowledgeListByOrder = (pageNum, pageSize) => {
+  return request({
+    url: `${base_api}/findByPageByOrder/${pageNum}/${pageSize}`,
+    method: 'post',
+  })
+}
+
+// 处理审批知识
+export const ProcessDtKnowledge = (id, status) => {
+  return request({
+    url: `${base_api}/processDtKnowledge/${id}/${status}`,
+    method: 'put',
+  })
+}
