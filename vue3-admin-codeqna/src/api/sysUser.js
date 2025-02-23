@@ -48,3 +48,11 @@ export const AssignRoleToUser = assignRoleDto => {
     data: assignRoleDto,
   })
 }
+
+// 人员查找
+export const GetSysUserById = processorId => {
+  return request({
+    url: `${base_api}/getSysUserById/${processorId}`,
+    method: 'post',
+  })
+}
