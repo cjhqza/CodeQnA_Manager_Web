@@ -26,11 +26,11 @@
         >
           <div class="tags-container">
             <el-tag
-              v-for="(item, index) in scope.row.tagIds"
+              v-for="(item, index) in scope.row.tagNames"
               :key="index"
               class="tag-atrr"
             >
-              {{ tagMap[item] }}
+              {{ item }}
             </el-tag>
           </div>
         </el-table-column>
@@ -127,9 +127,6 @@ const pageParamsForm = {
 // 将pageForms包装成支持响应式的对象
 const pageParams = ref(pageParamsForm)
 
-// 标签映射集合
-const tagMap = ref({})
-
 // 预览对话框显示设置变量
 const dialogVisible = ref(false)
 
@@ -150,7 +147,6 @@ const dtKnowledgeVo = ref(dtKnowledgeVoForm)
 
 // 挂载
 onMounted(() => {
-  getTagListTree()
   fetchData()
 })
 
@@ -166,29 +162,6 @@ const fetchData = async () => {
   } else {
     ElMessage.error(message)
   }
-}
-
-// 获取标签树
-const getTagListTree = async () => {
-  const { code, data, message } = await GetDtTagListTree()
-  if (code === 200) {
-    // 清空
-    tagMap.value = {}
-    buildTagMap(data)
-  } else {
-    ElMessage.error(message)
-  }
-}
-
-// 递归构建标签映射
-const buildTagMap = nodes => {
-  nodes.forEach(node => {
-    console.log(node)
-    tagMap.value[node.id] = node.tagName
-    if (node.children && node.children.length) {
-      buildTagMap(node.children)
-    }
-  })
 }
 
 // 预览按钮功能
