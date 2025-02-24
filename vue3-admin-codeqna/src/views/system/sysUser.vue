@@ -546,6 +546,8 @@ const submitAssign = async () => {
     dialogRoleVisible.value = false
     // 刷新页面
     fetchData()
+  } else {
+    ElMessage.error(message)
   }
 }
 </script>
