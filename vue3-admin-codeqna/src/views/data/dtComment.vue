@@ -99,7 +99,7 @@
       />
     </div>
 
-    <!-- 预览知识对话框 -->
+    <!-- 预览评论对话框 -->
     <el-dialog
       v-model="dialogVisible"
       class="dtCommentDialog"

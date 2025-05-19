@@ -58,7 +58,7 @@
     </div>
     <template #dropdown>
       <el-dropdown-menu>
-        <el-dropdown-item>{{ $t('topbar.center') }}</el-dropdown-item>
+        <!-- <el-dropdown-item>{{ $t('topbar.center') }}</el-dropdown-item> -->
         <el-dropdown-item>{{ $t('topbar.password') }}</el-dropdown-item>
         <lock-modal />
         <el-dropdown-item @click="logout">

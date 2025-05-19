@@ -56,3 +56,12 @@ export const GetSysUserById = processorId => {
     method: 'post',
   })
 }
+
+// 导出
+export const ExportSysUser = () => {
+  return request({
+    url: `${base_api}/exportData`,
+    method: 'get',
+    responseType: 'blob',
+  })
+}

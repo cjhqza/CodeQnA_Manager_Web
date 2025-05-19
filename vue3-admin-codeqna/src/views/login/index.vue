@@ -188,9 +188,11 @@ export default defineComponent({
   .form {
     width: 520px;
     max-width: 100%;
-    padding: 0 24px;
+    padding: 15px 24px;
     box-sizing: border-box;
     margin: 160px auto 0;
+    // border: 3px solid #ddd;
+    // border-radius: 5px;
 
     :deep {
       .el-input__wrapper {
@@ -212,15 +214,15 @@ export default defineComponent({
     .title {
       color: #fff;
       text-align: center;
-      font-size: 24px;
-      margin: 0 0 24px;
+      font-size: 30px;
+      padding: 15px 0;
     }
 
     .text {
-      font-size: 16px;
+      font-size: 18px;
 
       :deep(.el-input__inner) {
-        color: #fff;
+        color: #ddd;
         height: 48px;
         line-height: 48px;
 

@@ -45,7 +45,7 @@ import { useMenus } from './pinia/modules/menu'
 const getPageTitle = title => {
   const { title: appTitle } = useApp()
   if (title) {
-    return `${title} - ${appTitle}`
+    return `${title} - CodeQnA`
   }
   return appTitle
 }

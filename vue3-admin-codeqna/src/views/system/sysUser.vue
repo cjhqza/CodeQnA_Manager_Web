@@ -85,6 +85,77 @@
           </svg>
           &nbsp;新 建
         </el-button>
+        <el-upload
+          class="upload-sysUser"
+          action="http://localhost:8501/admin/system/sysUser/importData"
+          :show-file-list="false"
+          :on-success="importSysUserSuccess"
+          :headers="headers"
+        >
+          <el-button type="warning" size="small" class="btns-import">
+            <svg
+              t="1745510016933"
+              class="import-icon"
+              viewBox="0 0 1024 1024"
+              version="1.1"
+              xmlns="http://www.w3.org/2000/svg"
+              p-id="3744"
+              width="16"
+              height="16"
+            >
+              <path
+                d="M880.213333 870.4h-716.8V153.6h318.293334V85.333333H146.346667c-28.16 0-51.2 23.04-51.2 51.2v750.933334c0 28.16 23.04 51.2 51.2 51.2h750.933333c28.16 0 51.2-23.04 51.2-51.2v-346.88h-68.266667V870.4z"
+                fill="#ffffff"
+                p-id="3745"
+              ></path>
+              <path
+                d="M914.346667 763.733333c-18.773333 0-34.133333-15.36-34.133334-34.133333v-200.533333c0-18.773333 15.36-34.133333 34.133334-34.133334s34.133333 15.36 34.133333 34.133334v200.533333c0 18.773333-14.933333 34.133333-34.133333 34.133333zM504.746667 153.6h-89.6c-18.773333 0-34.133333-15.36-34.133334-34.133333s15.36-34.133333 34.133334-34.133334h89.6c18.773333 0 34.133333 15.36 34.133333 34.133334s-14.933333 34.133333-34.133333 34.133333zM688.64 600.746667h-220.16c-19.2 0-34.986667-15.786667-34.986667-34.986667 0-19.2 15.786667-34.986667 34.986667-34.986667h220.16c19.2 0 34.986667 15.786667 34.986667 34.986667 0 19.2-15.36 34.986667-34.986667 34.986667z"
+                fill="#ffffff"
+                p-id="3746"
+              ></path>
+              <path
+                d="M433.493333 565.76V345.6c0-19.2 15.786667-34.986667 34.986667-34.986667 19.2 0 34.986667 15.786667 34.986667 34.986667v220.16c0 19.2-15.786667 34.986667-34.986667 34.986667-19.2 0-34.986667-15.786667-34.986667-34.986667z"
+                fill="#ffffff"
+                p-id="3747"
+              ></path>
+              <path
+                d="M444.16 590.506667l-0.426667-0.426667c-13.226667-13.226667-13.226667-34.56 0-47.786667L890.453333 95.146667c13.226667-13.226667 34.56-13.226667 47.786667 0l0.426667 0.426666c13.226667 13.226667 13.226667 34.56 0 47.786667L491.52 590.506667c-13.226667 13.226667-34.56 13.226667-47.36 0z"
+                fill="#ffffff"
+                p-id="3748"
+              ></path>
+            </svg>
+            &nbsp;导 入
+          </el-button>
+        </el-upload>
+        <el-button
+          type="danger"
+          size="small"
+          @click="exportData"
+          class="btns-export"
+        >
+          <svg
+            t="1745509352882"
+            class="export-icon"
+            viewBox="0 0 1024 1024"
+            version="1.1"
+            xmlns="http://www.w3.org/2000/svg"
+            p-id="2365"
+            width="16"
+            height="16"
+          >
+            <path
+              d="M959.96952 415.997629a31.970084 31.970084 0 0 0-63.940169 0v393.141729a86.153056 86.153056 0 0 1-25.43157 61.368112c-16.41131 16.41131-38.230441 25.377383-61.436749 25.377384H214.85703c-23.20992 0-45.0724-8.966073-61.483711-25.377384S127.880338 832.349278 127.880338 809.14297V214.85703a86.900831 86.900831 0 0 1 86.911668-86.850257L607.893997 129.325314h0.104761a32.020659 32.020659 0 0 0 0.101149-64.041318L214.961791 63.940169h-0.104761A150.96021 150.96021 0 0 0 63.940169 214.85703v594.28594A150.613416 150.613416 0 0 0 214.85703 959.825022h594.28594a150.570067 150.570067 0 0 0 150.82655-150.692889V415.997629z"
+              fill="#ffffff"
+              p-id="2366"
+            ></path>
+            <path
+              d="M735.853809 128.241582h114.691324L233.392454 745.39426a31.970084 31.970084 0 0 0 45.213286 45.213286L895.884854 173.317595l0.057799 114.821371a31.944797 31.944797 0 0 0 31.970084 31.923123 31.937573 31.937573 0 0 0 31.955635-31.955635l-0.097536-191.849406a31.970084 31.970084 0 0 0-31.970085-31.952023H735.853809a31.970084 31.970084 0 0 0 0 63.936557z"
+              fill="#ffffff"
+              p-id="2367"
+            ></path>
+          </svg>
+          &nbsp;导 出
+        </el-button>
       </div>
       <span class="btns-flush" @click="flushSysUser">
         <svg
@@ -191,64 +262,74 @@
         </div>
       </template>
       <el-form>
-        <el-form-item>
-          <el-input
-            prefix-icon="User"
-            v-model="sysUser.userName"
-            placeholder="人员名称"
-            clearable
-          />
-        </el-form-item>
-        <el-form-item v-if="sysUser.id == null">
-          <el-input
-            prefix-icon="Lock"
-            type="password"
-            show-password
-            v-model="sysUser.password"
-            placeholder="设置密码"
-            clearable
-          />
-        </el-form-item>
-        <el-form-item>
-          <el-input
-            prefix-icon="UserFilled"
-            v-model="sysUser.name"
-            placeholder="姓名"
-            clearable
-          />
-        </el-form-item>
-        <el-form-item>
-          <el-input
-            prefix-icon="Iphone"
-            v-model="sysUser.phone"
-            placeholder="手机号码"
-            clearable
-          />
-        </el-form-item>
-        <el-form-item>
-          <el-upload
-            drag
-            class="avatar-uploader"
-            action="http://localhost:8501/admin/system/avatarFileUpload"
-            :show-file-list="false"
-            :on-success="handleAvatarSuccess"
-            :headers="headers"
-          >
-            <img v-if="sysUser.avatar" :src="sysUser.avatar" class="avatar" />
-            <el-icon v-else class="avatar-uploader-icon">
-              <upload-filled />
-              <div class="avatar-uploader-text">
-                拖拽文件 或
-                <em>点击上传 头像</em>
-              </div>
-            </el-icon>
-            <template #tip>
-              <div class="avatar-uploader-tip">
-                * 未有头像文件上传将默认使用系统头像
-              </div>
-            </template>
-          </el-upload>
-        </el-form-item>
+        <div class="form-top">
+          <div class="form-left">
+            <el-form-item>
+              <el-input
+                prefix-icon="User"
+                v-model="sysUser.userName"
+                placeholder="人员名称"
+                clearable
+              />
+            </el-form-item>
+            <el-form-item v-if="sysUser.id == null">
+              <el-input
+                prefix-icon="Lock"
+                type="password"
+                show-password
+                v-model="sysUser.password"
+                placeholder="设置密码"
+                clearable
+              />
+            </el-form-item>
+            <el-form-item>
+              <el-input
+                prefix-icon="UserFilled"
+                v-model="sysUser.name"
+                placeholder="姓名"
+                clearable
+              />
+            </el-form-item>
+            <el-form-item>
+              <el-input
+                prefix-icon="Iphone"
+                v-model="sysUser.phone"
+                placeholder="手机号码"
+                clearable
+              />
+            </el-form-item>
+          </div>
+          <div class="form-right">
+            <el-form-item>
+              <el-upload
+                drag
+                class="avatar-uploader"
+                action="http://localhost:8501/admin/system/avatarFileUpload"
+                :show-file-list="false"
+                :on-success="handleAvatarSuccess"
+                :headers="headers"
+              >
+                <img
+                  v-if="sysUser.avatar"
+                  :src="sysUser.avatar"
+                  class="avatar"
+                />
+                <el-icon v-else class="avatar-uploader-icon">
+                  <upload-filled />
+                  <div class="avatar-uploader-text">
+                    拖拽文件 或
+                    <em>点击上传 头像</em>
+                  </div>
+                </el-icon>
+                <template #tip>
+                  <div class="avatar-uploader-tip">
+                    * 未有头像文件上传将默认使用系统头像
+                  </div>
+                </template>
+              </el-upload>
+            </el-form-item>
+          </div>
+        </div>
         <el-form-item>
           <el-input
             prefix-icon="Document"
@@ -318,6 +399,7 @@ import {
   AssignRoleToUser,
   DeleteSysUser,
   EditSysUser,
+  ExportSysUser,
   GetSysUserListByPage,
 } from '@/api/sysUser'
 import { ElMessage, ElMessageBox } from 'element-plus'
@@ -502,6 +584,12 @@ const deleteSysUser = row => {
   })
 }
 
+// excel数据导入成功以后的事件处理函数
+const importSysUserSuccess = (response, uploadFile) => {
+  ElMessage.success('导入完成')
+  fetchData()
+}
+
 // 文件上传功能
 // 从pinia中获取token，在进行文件上传的时候将token设置到请求头中
 const headers = {
@@ -549,6 +637,22 @@ const submitAssign = async () => {
   } else {
     ElMessage.error(message)
   }
+}
+
+// 导出功能
+const exportData = () => {
+  console.log('导出')
+  ExportSysUser().then(res => {
+    // 创建Blob对象
+    const blob = new Blob([res])
+    // 创建a标签，将Blob对象转换为url
+    const link = document.createElement('a')
+    link.href = window.URL.createObjectURL(blob)
+    // 设置下载文件名
+    link.download = '管理员信息数据.xlsx'
+    // 点击下载
+    link.click()
+  })
 }
 </script>
 
@@ -612,8 +716,19 @@ const submitAssign = async () => {
         margin-right: 10px;
       }
 
-      .btns-add {
+      .btns-add,
+      .btns-import,
+      .btns-export {
         width: 60px;
+      }
+
+      .upload-sysUser {
+        display: flex;
+        width: 60px;
+        /* height: 100%; */
+        justify-content: center;
+        /* border: 1px solid red; */
+        margin: 0 12px;
       }
     }
 
@@ -648,44 +763,49 @@ const submitAssign = async () => {
     }
   }
 
-  .avatar-uploader {
-    .avatar {
-      width: 150px;
-      height: 150px;
-      display: block;
-    }
+  .form-top {
+    display: flex;
+    justify-content: space-between;
 
-    .el-upload {
-      border: 1px dashed var(--el-border-color);
-      border-radius: 6px;
-      cursor: pointer;
-      position: relative;
-      overflow: hidden;
-      transition: var(--el-transition-duration-fast);
-    }
-
-    .el-upload:hover {
-      border-color: var(--el-color-primary);
-    }
-
-    .avatar-uploader-icon {
-      display: flex;
-      flex-direction: column;
-      font-size: 30px;
-      color: #8c939d;
-      width: 150px;
-      height: 150px;
-      text-align: center;
-
-      .avatar-uploader-text {
-        margin-top: 5px;
-        font-size: 12px;
+    .avatar-uploader {
+      .avatar {
+        width: 150px;
+        height: 150px;
+        display: block;
       }
-    }
 
-    .avatar-uploader-tip {
-      font-size: 10px;
-      color: #8c939d;
+      .el-upload {
+        border: 1px dashed var(--el-border-color);
+        border-radius: 6px;
+        cursor: pointer;
+        position: relative;
+        overflow: hidden;
+        transition: var(--el-transition-duration-fast);
+      }
+
+      .el-upload:hover {
+        border-color: var(--el-color-primary);
+      }
+
+      .avatar-uploader-icon {
+        display: flex;
+        flex-direction: column;
+        font-size: 30px;
+        color: #8c939d;
+        width: 180px;
+        height: 80px;
+        text-align: center;
+
+        .avatar-uploader-text {
+          margin-top: 5px;
+          font-size: 12px;
+        }
+      }
+
+      .avatar-uploader-tip {
+        font-size: 10px;
+        color: #8c939d;
+      }
     }
   }
 
@@ -693,6 +813,7 @@ const submitAssign = async () => {
     display: flex;
     width: 100%;
     justify-content: space-between;
+
     .form-item {
       width: 48%;
     }
