@@ -6,3 +6,5 @@ Vue3 Element Admin是基于vue3+ElementPlus+Vite开发，已经提供了基础�
 
 项目安装依赖：npm install
 项目启动运行：npm start
+
+项目下载地址：https://github.com/cjhqza/CodeQnA_Manager_Web
